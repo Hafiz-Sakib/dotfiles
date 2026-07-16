@@ -1,0 +1,16 @@
+[user]
+	name = hafiz-sakib
+	email = hafizsakib5@gmail.com
+[init]
+	defaultBranch = main
+[core]
+	autocrlf = input
+[color]
+	ui = auto
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[credential]
+	helper = manager
+	credentialStore = secretservice
+	helper = 
+	helper = /usr/local/bin/git-credential-manager

@@ -1,0 +1,48 @@
+# ==========================
+# OS
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Cache
+# ==========================
+.cache/
+.local/share/Trash/
+
+# ==========================
+# Secrets
+# ==========================
+.env
+.env.*
+*.pem
+*.key
+
+# ==========================
+# Node.js
+# ==========================
+node_modules/
+dist/
+build/
+
+# ==========================
+# VS Code Cache
+# ==========================
+.config/Code/Cache/
+.config/Code/CachedData/
+.config/Code/CachedExtensionVSIXs/
+.config/Code/Crashpad/
+.config/Code/GPUCache/
+.config/Code/logs/
+.config/Code/Service Worker/
+.config/Code/WebStorage/
+.config/Code/workspaceStorage/
+.config/Code/User/History/
+.config/Code/User/globalStorage/
+
+# ==========================
+# Temporary Files
+# ==========================
+*.log
+*.tmp
+*.swp
