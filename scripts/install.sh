@@ -31,7 +31,7 @@ fi
 
 echo "==> Installing Flatpak packages..."
 
-if [ -f "$DOTFILES/packages/flatpak.txt" ]; then
+if command -v flatpak >/dev/null 2>&1 && [ -f "$DOTFILES/packages/flatpak.txt" ]; then
     while read -r pkg; do
         [ -z "$pkg" ] && continue
         flatpak install -y flathub "$pkg"
@@ -44,7 +44,7 @@ fi
 
 echo "==> Installing Snap packages..."
 
-if [ -f "$DOTFILES/packages/snap.txt" ]; then
+if command -v snap >/dev/null 2>&1 && [ -f "$DOTFILES/packages/snap.txt" ]; then
     while read -r pkg; do
         [ -z "$pkg" ] && continue
         sudo snap install "$pkg"
@@ -57,7 +57,7 @@ fi
 
 echo "==> Installing VS Code extensions..."
 
-if command -v code >/dev/null && [ -f "$DOTFILES/packages/vscode-extensions.txt" ]; then
+if command -v code >/dev/null 2>&1 && [ -f "$DOTFILES/packages/vscode-extensions.txt" ]; then
     while read -r ext; do
         [ -z "$ext" ] && continue
         code --install-extension "$ext" --force
@@ -72,7 +72,7 @@ echo "==> Applying GNU Stow..."
 
 cd "$DOTFILES"
 
-for pkg in bash dconf fastfetch fonts git gtk icons profile themes vscode; do
+for pkg in bash fastfetch fonts git gtk icons profile themes vscode; do
     [ -d "$pkg" ] && stow "$pkg"
 done
 
@@ -85,7 +85,7 @@ if [ -x "$DOTFILES/scripts/restore-extensions.sh" ]; then
 fi
 
 ########################################
-# Restore GNOME Settings
+# Restore GNOME Settings (dconf)
 ########################################
 
 if [ -x "$DOTFILES/scripts/restore-dconf.sh" ]; then
@@ -93,10 +93,10 @@ if [ -x "$DOTFILES/scripts/restore-dconf.sh" ]; then
 fi
 
 ########################################
-# Rebuild Font Cache
+# Refresh Font Cache
 ########################################
 
-echo "==> Rebuilding font cache..."
+echo "==> Refreshing font cache..."
 fc-cache -fv
 
 ########################################
