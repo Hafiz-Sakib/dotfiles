@@ -1,0 +1,25 @@
+🔵 Add to Desktop (add-to-desktop@tommimon.github.com) v16 /system
+🔵 Blur my Shell (blur-my-shell@aunetx) v72 /user
+🔵 Caffeine (caffeine@patapon.info) v60 /user
+🔵 Clipboard Indicator (clipboard-indicator@tudmotu.com) v71 /user
+🔵 Customize Clock on Lock Screen (CustomizeClockOnLockScreen@pratap.fastmail.fm) v26 /user
+🔵 Dash to Dock (dash-to-dock@micxgx.gmail.com) v105 /user
+🔵 Desktop Cube (desktop-cube@schneegans.github.com) v33 /user
+🔵 Removable Drive Menu (drive-menu@gnome-shell-extensions.gcampax.github.com)  /system
+🔵 Dual Monitor Toggle (dual-monitor-toggle@poka) v10 /user
+🔵 Emoji Copy (emoji-copy@felipeftn) v34 /user
+🔵 GNOME Fuzzy App Search (gnome-fuzzy-app-search@gnome-shell-extensions.Czarlie.gitlab.com) v28 /user
+🔵 Hibernate Status Button (hibernate-status@dromi) v42 /user
+🔵 Rounded Window Corners (rounded-windows@marcosgt.github.io) v1 /user
+🔵 Internet Speed Meter (speed-meter@mojahid.lunecode.com) v4 /user
+🔵 User Themes (user-theme@gnome-shell-extensions.gcampax.github.com)  /system
+🔵 Vitals (Vitals@CoreCoding.com) v77 /user
+🔵 X11 Gestures (x11gestures@joseexposito.github.io) v25 /system
+🔵 Zorin AppIndicators (zorin-appindicator@zorinos.com)  /system
+🔵 Zorin Desktop Cube (zorin-desktop-cube@zorinos.com) v31 /system
+🔵 Zorin Desktop Icons (zorin-desktop-icons@zorinos.com)  /system
+🔵 Zorin Magic Lamp Effect (zorin-magic-lamp-effect@zorinos.com) v22 /system
+🔵 Zorin Printers (zorin-printers@zorinos.com) v29 /system
+🔵 Zorin Spatial Window Switcher (zorin-spatial-window-switcher@zorinos.com)  /system
+🔵 Zorin Tiling Shell (zorin-tiling-shell@zorinos.com) v99 /system
+🔵 Zorin Window Move Effect (zorin-window-move-effect@zorinos.com) v26 /system
