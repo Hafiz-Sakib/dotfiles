@@ -1,9 +1,31 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -e
 
-echo "Restoring dotfiles..."
+DOTFILES="$HOME/dotfiles"
 
-"$HOME/dotfiles/scripts/stow-all.sh"
+echo "========== Restoring Dotfiles =========="
 
-echo "Restore completed!"
+if ! command -v stow >/dev/null 2>&1; then
+    echo "Installing GNU Stow..."
+    sudo apt update
+    sudo apt install -y stow
+fi
+
+cd "$DOTFILES"
+
+echo "Applying dotfiles..."
+stow bash git profile vscode fastfetch gtk fonts
+
+echo "Updating font cache..."
+fc-cache -fv >/dev/null
+
+if command -v code >/dev/null 2>&1; then
+    echo "Installing VS Code extensions..."
+    while read extension; do
+        code --install-extension "$extension" --force
+    done < packages/vscode-extensions.txt
+fi
+
+echo
+echo "✅ Restore completed!"
