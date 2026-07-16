@@ -55,7 +55,14 @@ command -v fc-cache >/dev/null 2>&1 && fc-cache -fv >/dev/null 2>&1 && ok "Font 
 cd "$DOTFILES" || exit 1
 
 echo
+step "Checking Git status"
 git status --short
+
+if git diff --quiet && git diff --cached --quiet; then
+    echo
+    ok "Nothing changed. Backup is already up to date."
+    exit 0
+fi
 
 APT=$(wc -l < packages/apt.txt 2>/dev/null || echo 0)
 FP=$(wc -l < packages/flatpak.txt 2>/dev/null || echo 0)
@@ -72,7 +79,7 @@ echo "VSCode Extensions  : $VS"
 echo "GNOME Extensions   : $GE"
 echo "===================================="
 
-read -rp "Commit & push? [y/N]: " ans
+read -rp "Commit & push? [Y/N]: " ans
 if [[ "$ans" =~ ^[Yy]$ ]]; then
  read -rp "Commit message: " msg
  git add .
