@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -u
 
+VERSION="1.0.0"
+
+echo
+echo "========================================"
+echo "      Dotfiles Backup v$VERSION"
+echo "========================================"
+echo
+
 DOTFILES="$HOME/dotfiles"
 START_TIME=$(date +%s)
 
