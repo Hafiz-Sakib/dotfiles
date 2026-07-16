@@ -77,22 +77,27 @@ for pkg in bash dconf fastfetch fonts git gtk icons profile themes vscode; do
 done
 
 ########################################
-# Rebuild Font Cache
+# Restore GNOME Extensions
 ########################################
 
-echo "==> Rebuilding font cache..."
-
-fc-cache -fv
+if [ -x "$DOTFILES/scripts/restore-extensions.sh" ]; then
+    "$DOTFILES/scripts/restore-extensions.sh"
+fi
 
 ########################################
 # Restore GNOME Settings
 ########################################
 
-echo "==> Restoring GNOME settings..."
-
-if [ -f "$DOTFILES/dconf/settings.ini" ]; then
-    dconf load / < "$DOTFILES/dconf/settings.ini"
+if [ -x "$DOTFILES/scripts/restore-dconf.sh" ]; then
+    "$DOTFILES/scripts/restore-dconf.sh"
 fi
+
+########################################
+# Rebuild Font Cache
+########################################
+
+echo "==> Rebuilding font cache..."
+fc-cache -fv
 
 ########################################
 # Finished
