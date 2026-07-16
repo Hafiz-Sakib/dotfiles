@@ -221,6 +221,7 @@ libxxhash0
 libyaml-0-2
 libzstd-dev
 libzstd1
+linux-generic-hwe-24.04
 locales
 login
 logrotate
@@ -247,6 +248,7 @@ openssh-client
 openssl
 passwd
 perl-base
+pipx
 pkg-config
 poppler-data
 procps
