@@ -167,7 +167,7 @@ echo "===================================="
 # Commit & Push
 ########################################
 
-read -rp "Commit & push? [Y/n]: " ans
+read -rp "Commit & push? [Y/N]: " ans
 ans=${ans:-Y}
 
 if [[ "$ans" =~ ^[Yy]$ ]]; then
