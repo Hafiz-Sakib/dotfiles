@@ -167,10 +167,11 @@ echo "===================================="
 # Commit & Push
 ########################################
 
-read -rp "Commit & push? [Y/N]: " ans
+read -rp "Commit & push? [Y/n]: " ans
+ans=${ans:-Y}
 
 if [[ "$ans" =~ ^[Yy]$ ]]; then
-    read -rp "Commit message: " msg
+    read -rp "Commit message (default: Backup update): " msg
 
     git add .
     git commit -m "${msg:-Backup update}"
@@ -180,6 +181,7 @@ if [[ "$ans" =~ ^[Yy]$ ]]; then
 else
     warn "Commit skipped."
 fi
+
 
 ########################################
 # Finished
