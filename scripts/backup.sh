@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -u
 
-VERSION="1.0.0"
+VERSION="1.0.1"
 
 echo
 echo "========================================"
@@ -12,50 +12,130 @@ echo
 DOTFILES="$HOME/dotfiles"
 START_TIME=$(date +%s)
 
-GREEN="\033[0;32m"; YELLOW="\033[1;33m"; RED="\033[0;31m"; BLUE="\033[0;34m"; NC="\033[0m"
-ok(){ echo -e "${GREEN}[✔]${NC} $1"; }
-warn(){ echo -e "${YELLOW}[⚠]${NC} $1"; }
-step(){ echo -e "\n${BLUE}==>${NC} $1"; }
+GREEN="\033[0;32m"
+YELLOW="\033[1;33m"
+BLUE="\033[0;34m"
+NC="\033[0m"
 
-mkdir -p "$DOTFILES/packages" "$DOTFILES/dconf" "$DOTFILES/gnome"
+ok()   { echo -e "${GREEN}[✔]${NC} $1"; }
+warn() { echo -e "${YELLOW}[⚠]${NC} $1"; }
+step() { echo -e "\n${BLUE}==>${NC} $1"; }
+
+mkdir -p \
+    "$DOTFILES/packages" \
+    "$DOTFILES/dconf" \
+    "$DOTFILES/gnome"
+
+########################################
+# VS Code Extensions
+########################################
 
 step "Updating VS Code extensions"
-command -v code >/dev/null 2>&1 && code --list-extensions | sort > "$DOTFILES/packages/vscode-extensions.txt" && ok "VS Code updated." || warn "VS Code unavailable."
+
+if command -v code >/dev/null 2>&1; then
+    code --list-extensions | sort > "$DOTFILES/packages/vscode-extensions.txt"
+    ok "VS Code extensions updated."
+else
+    warn "VS Code not found."
+fi
+
+########################################
+# APT Packages
+########################################
 
 step "Updating APT packages"
-command -v apt-mark >/dev/null 2>&1 && apt-mark showmanual | sort > "$DOTFILES/packages/apt.txt" && ok "APT updated." || warn "apt unavailable."
+
+if command -v apt-mark >/dev/null 2>&1; then
+    apt-mark showmanual | sort > "$DOTFILES/packages/apt.txt"
+    ok "APT package list updated."
+else
+    warn "APT unavailable."
+fi
+
+########################################
+# Flatpak Packages
+########################################
 
 step "Updating Flatpak packages"
+
 if command -v flatpak >/dev/null 2>&1; then
- flatpak list --app --columns=application | sort > "$DOTFILES/packages/flatpak.txt"
- ok "Flatpak updated."
-else warn "Flatpak unavailable."; fi
+    flatpak list --app --columns=application \
+        | sort > "$DOTFILES/packages/flatpak.txt"
+    ok "Flatpak package list updated."
+else
+    warn "Flatpak unavailable."
+fi
+
+########################################
+# Snap Packages
+########################################
 
 step "Updating Snap packages"
+
 if command -v snap >/dev/null 2>&1; then
- snap list | awk 'NR>1{print $1}' | sort > "$DOTFILES/packages/snap.txt"
- ok "Snap updated."
-else warn "Snap unavailable."; fi
+    snap list \
+        | awk 'NR>1{print $1}' \
+        | sort > "$DOTFILES/packages/snap.txt"
+    ok "Snap package list updated."
+else
+    warn "Snap unavailable."
+fi
+
+########################################
+# GNOME Settings (includes extension settings)
+########################################
 
 step "Backing up GNOME settings"
+
 if command -v dconf >/dev/null 2>&1; then
- dconf dump / > "$DOTFILES/dconf/settings.ini"
- ok "dconf exported."
+    dconf dump / > "$DOTFILES/dconf/settings.ini"
+    ok "GNOME settings exported."
+else
+    warn "dconf unavailable."
 fi
 
-step "Backing up enabled GNOME extensions"
-if command -v gsettings >/dev/null 2>&1; then
- gsettings get org.gnome.shell enabled-extensions | tr -d "[]'," | tr ' ' '\n' | grep '@' > "$DOTFILES/gnome/extensions.txt" || true
- ok "Extensions updated."
+########################################
+# Installed GNOME User Extensions
+########################################
+
+step "Backing up installed GNOME extensions"
+
+EXT_DIR="$HOME/.local/share/gnome-shell/extensions"
+
+if [ -d "$EXT_DIR" ]; then
+    find "$EXT_DIR" \
+        -mindepth 1 \
+        -maxdepth 1 \
+        -type d \
+        -printf "%f\n" \
+        | sort > "$DOTFILES/gnome/extensions.txt"
+
+    ok "Installed GNOME extensions updated."
+else
+    : > "$DOTFILES/gnome/extensions.txt"
+    warn "No user-installed GNOME extensions found."
 fi
+
+########################################
+# Refresh Font Cache
+########################################
 
 step "Refreshing font cache"
-command -v fc-cache >/dev/null 2>&1 && fc-cache -fv >/dev/null 2>&1 && ok "Font cache refreshed."
+
+if command -v fc-cache >/dev/null 2>&1; then
+    fc-cache -fv >/dev/null 2>&1
+    ok "Font cache refreshed."
+fi
+
+########################################
+# Git Status
+########################################
 
 cd "$DOTFILES" || exit 1
 
 echo
 step "Checking Git status"
+
 git status --short
 
 if git diff --quiet && git diff --cached --quiet; then
@@ -63,6 +143,10 @@ if git diff --quiet && git diff --cached --quiet; then
     ok "Nothing changed. Backup is already up to date."
     exit 0
 fi
+
+########################################
+# Summary
+########################################
 
 APT=$(wc -l < packages/apt.txt 2>/dev/null || echo 0)
 FP=$(wc -l < packages/flatpak.txt 2>/dev/null || echo 0)
@@ -79,16 +163,29 @@ echo "VSCode Extensions  : $VS"
 echo "GNOME Extensions   : $GE"
 echo "===================================="
 
+########################################
+# Commit & Push
+########################################
+
 read -rp "Commit & push? [Y/N]: " ans
+
 if [[ "$ans" =~ ^[Yy]$ ]]; then
- read -rp "Commit message: " msg
- git add .
- git commit -m "${msg:-Backup update}"
- git push
- ok "Git push completed."
+    read -rp "Commit message: " msg
+
+    git add .
+    git commit -m "${msg:-Backup update}"
+    git push
+
+    ok "Git push completed."
 else
- warn "Commit skipped."
+    warn "Commit skipped."
 fi
 
+########################################
+# Finished
+########################################
+
 END_TIME=$(date +%s)
-ok "Backup finished in $((END_TIME-START_TIME)) seconds."
+
+echo
+ok "Backup finished in $((END_TIME - START_TIME)) seconds."
