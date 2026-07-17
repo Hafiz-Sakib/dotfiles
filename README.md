@@ -159,6 +159,11 @@ Restore your system
 - Professional README
 - Interactive Installer
 
+
+## 📚 Documentation
+
+- [Script Usage Guide](scripts.md)
+
 ## 🔮 Future
 
 - Distro detection
