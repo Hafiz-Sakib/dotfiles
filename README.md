@@ -162,7 +162,7 @@ Restore your system
 
 ## 📚 Documentation
 
-- [Script Usage Guide](scripts.md)
+- 📜 [Script Usage Guide](scripts.md)
 - 🔧 [Git & GitHub Setup Guide](setup-git.md)
 ## 🔮 Future
 
