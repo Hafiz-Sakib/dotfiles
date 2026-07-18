@@ -15,6 +15,7 @@ ms-vscode.cpp-devtools
 ms-vscode.cpptools
 ms-vscode.cpptools-extension-pack
 ms-vscode.cpptools-themes
+rangav.vscode-thunder-client
 ritwickdey.liveserver
 vscode-icons-team.vscode-icons
 xabikos.javascriptsnippets
