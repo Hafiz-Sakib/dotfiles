@@ -1,6 +1,8 @@
 aries.aries
+bradlc.vscode-tailwindcss
 christian-kohler.path-intellisense
 divyanshuagrawal.competitive-programming-helper
+dsznajder.es7-react-js-snippets
 eamodio.gitlens
 esbenp.prettier-vscode
 formulahendry.code-runner
@@ -15,3 +17,5 @@ ms-vscode.cpptools-extension-pack
 ms-vscode.cpptools-themes
 ritwickdey.liveserver
 vscode-icons-team.vscode-icons
+xabikos.javascriptsnippets
+yzhang.markdown-all-in-one

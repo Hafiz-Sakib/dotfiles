@@ -38,6 +38,7 @@ dpkg
 e2fsprogs
 efibootmgr
 eject
+exfatprogs
 fastfetch
 fcitx5
 fcitx5-config-qt
