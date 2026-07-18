@@ -13,7 +13,7 @@
   "workbench.iconTheme": "vscode-icons",
   "vsicons.dontShowNewVersionMessage": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.fontFamily": "'operator mono','Fira Code','cascadia code',Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "Operator Mono, Fira Code, Cascadia Code, Consolas, 'Courier New', monospace",
   "editor.experimentalWhitespaceRendering": "off",
   "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font",
   "editor.fontLigatures": true,

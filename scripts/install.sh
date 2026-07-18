@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 DOTFILES="$HOME/dotfiles"
 
@@ -32,8 +32,8 @@ fi
 echo "==> Installing Flatpak packages..."
 
 if command -v flatpak >/dev/null 2>&1 && [ -f "$DOTFILES/packages/flatpak.txt" ]; then
-    while read -r pkg; do
-        [ -z "$pkg" ] && continue
+    while IFS= read -r pkg; do
+        [[ -z "$pkg" ]] && continue
         flatpak install -y flathub "$pkg"
     done < "$DOTFILES/packages/flatpak.txt"
 fi
@@ -45,8 +45,8 @@ fi
 echo "==> Installing Snap packages..."
 
 if command -v snap >/dev/null 2>&1 && [ -f "$DOTFILES/packages/snap.txt" ]; then
-    while read -r pkg; do
-        [ -z "$pkg" ] && continue
+    while IFS= read -r pkg; do
+        [[ -z "$pkg" ]] && continue
         sudo snap install "$pkg"
     done < "$DOTFILES/packages/snap.txt"
 fi
@@ -58,8 +58,8 @@ fi
 echo "==> Installing VS Code extensions..."
 
 if command -v code >/dev/null 2>&1 && [ -f "$DOTFILES/packages/vscode-extensions.txt" ]; then
-    while read -r ext; do
-        [ -z "$ext" ] && continue
+    while IFS= read -r ext; do
+        [[ -z "$ext" ]] && continue
         code --install-extension "$ext" --force
     done < "$DOTFILES/packages/vscode-extensions.txt"
 fi
@@ -72,8 +72,25 @@ echo "==> Applying GNU Stow..."
 
 cd "$DOTFILES"
 
-for pkg in bash fastfetch fonts git gtk icons profile themes vscode; do
-    [ -d "$pkg" ] && stow "$pkg"
+PACKAGES=(
+    bash
+    fastfetch
+    fonts
+    git
+    gtk
+    icons
+    profile
+    themes
+    vscode
+)
+
+for pkg in "${PACKAGES[@]}"; do
+    if [[ -d "$pkg" ]]; then
+        echo "==> Stowing: $pkg"
+        stow -R "$pkg"
+    else
+        echo "⚠️  Skipping missing package: $pkg"
+    fi
 done
 
 ########################################
@@ -97,7 +114,8 @@ fi
 ########################################
 
 echo "==> Refreshing font cache..."
-fc-cache -fv
+
+fc-cache -fv >/dev/null 2>&1
 
 ########################################
 # Finished

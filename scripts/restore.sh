@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 DOTFILES="$HOME/dotfiles"
 
@@ -28,27 +28,42 @@ echo "==> Applying GNU Stow..."
 
 cd "$DOTFILES"
 
-for pkg in bash fastfetch fonts git gtk icons profile themes vscode; do
-    [ -d "$pkg" ] && stow "$pkg"
+PACKAGES=(
+    bash
+    fastfetch
+    fonts
+    git
+    gtk
+    icons
+    profile
+    themes
+    vscode
+)
+
+for pkg in "${PACKAGES[@]}"; do
+    if [[ -d "$pkg" ]]; then
+        echo "==> Stowing: $pkg"
+        stow -R "$pkg"
+    else
+        echo "⚠️  Skipping missing package: $pkg"
+    fi
 done
 
 ########################################
 # Install VS Code Extensions
 ########################################
 
+echo "==> Installing VS Code extensions..."
+
 if command -v code >/dev/null 2>&1 && [ -f "$DOTFILES/packages/vscode-extensions.txt" ]; then
-
-    echo "==> Installing VS Code extensions..."
-
-    while read -r extension; do
-        [ -z "$extension" ] && continue
+    while IFS= read -r extension; do
+        [[ -z "$extension" ]] && continue
         code --install-extension "$extension" --force
     done < "$DOTFILES/packages/vscode-extensions.txt"
-
 fi
 
 ########################################
-# Install GNOME Extensions
+# Restore GNOME Extensions
 ########################################
 
 if [ -x "$DOTFILES/scripts/restore-extensions.sh" ]; then
@@ -77,5 +92,5 @@ fc-cache -fv >/dev/null 2>&1
 
 echo
 echo "========================================"
-echo "      Restore Complete!"
+echo "✅ Restore Complete!"
 echo "========================================"

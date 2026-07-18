@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -u
+
+set -euo pipefail
 
 VERSION="1.0.1"
 
@@ -74,7 +75,7 @@ step "Updating Snap packages"
 
 if command -v snap >/dev/null 2>&1; then
     snap list \
-        | awk 'NR>1{print $1}' \
+        | awk 'NR>1 {print $1}' \
         | sort > "$DOTFILES/packages/snap.txt"
     ok "Snap package list updated."
 else
@@ -82,7 +83,7 @@ else
 fi
 
 ########################################
-# GNOME Settings (includes extension settings)
+# GNOME Settings
 ########################################
 
 step "Backing up GNOME settings"
@@ -95,7 +96,7 @@ else
 fi
 
 ########################################
-# Installed GNOME User Extensions
+# Installed GNOME Extensions
 ########################################
 
 step "Backing up installed GNOME extensions"
@@ -131,14 +132,14 @@ fi
 # Git Status
 ########################################
 
-cd "$DOTFILES" || exit 1
+cd "$DOTFILES"
 
 echo
 step "Checking Git status"
 
 git status --short
 
-if git diff --quiet && git diff --cached --quiet; then
+if [[ -z "$(git status --porcelain)" ]]; then
     echo
     ok "Nothing changed. Backup is already up to date."
     exit 0
@@ -174,14 +175,20 @@ if [[ "$ans" =~ ^[Yy]$ ]]; then
     read -rp "Commit message (default: Backup update): " msg
 
     git add .
+
+    if git diff --cached --quiet; then
+        warn "Nothing staged to commit."
+        exit 0
+    fi
+
     git commit -m "${msg:-Backup update}"
+    git pull --rebase
     git push
 
     ok "Git push completed."
 else
     warn "Commit skipped."
 fi
-
 
 ########################################
 # Finished
